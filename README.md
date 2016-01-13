@@ -4,6 +4,8 @@ Netease Music Remote Controller With Web for mac
 ## What's this?
 You can controll your Netease Music on mac through this
 
+![image](http://i.imgur.com/nrFhIOB.png)
+
 ## Usage
 
 > npm install netease_remote
