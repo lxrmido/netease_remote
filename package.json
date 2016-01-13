@@ -1,0 +1,25 @@
+{
+  "name": "netease_remote",
+  "version": "1.0.0",
+  "description": "A Netease Music remote controller with web",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lxrmido@lxrmido.com",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3",
+    "nodobjc": "^2.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lxrmido/netease_remote.git"
+  },
+  "keywords": [
+    "netease", "remote", "music", "keybord"
+  ],
+  "bugs":{
+    "url": "https://github.com/lxrmido/netease_remote/issue"
+  }
+}

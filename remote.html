@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>网易云音乐遥控器</title>
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style>
+		body{
+			background-color:rgb(246,246,246);
+		}
+		.rm-frame{
+			width:300px;
+			height:300px;
+			position:fixed;
+			top:50%;
+			left:50%;
+			margin-top:-150px;
+			margin-left:-150px;
+		}
+		.btn{
+			position:absolute;
+			width:50px;
+			height:50px;
+			border-radius:25px;
+			margin-top:-25px;
+			margin-left:-25px;
+			position:absolute;
+			top:50%;
+			left:50%;
+			text-align:center;
+			font-size:24px;
+			color:#fff;
+			line-height:50px;
+		}
+		.btn.red:active{
+			background:rgb(152,21,26);
+		}
+		.btn.play{
+			width:100px;
+			height:100px;
+			border-radius:50px;
+			margin-top:-50px;
+			margin-left:-50px;
+			position:absolute;
+			top:50%;
+			left:50%;
+			z-index:200;
+			box-shadow:0 0 8px rgba(0, 0, 0, .6);
+		}
+		.btn.play:after{
+			position:absolute;
+			content:"";
+			border-left:36px #fff solid;
+			border-top:18px rgba(0,0,0,0) solid;
+			border-bottom:18px rgba(0,0,0,0) solid;
+			margin-top:-18px;
+			margin-left:-14px;
+			top:50%;
+			left:50%;
+		}
+		.red-bg{
+			background-color:rgb(212, 60, 62);
+		}
+		.btn.prev{
+			margin-left:-125px;
+		}
+		.btn.prev:after{
+			position:absolute;
+			content:"";
+			border-right:18px #fff solid;
+			border-top:9px rgba(0,0,0,0) solid;
+			border-bottom:9px rgba(0,0,0,0) solid;
+			margin-top:-9px;
+			margin-left:-11px;
+			top:50%;
+			left:50%;
+		}
+		.btn.prev:before{
+			position:absolute;
+			content:"";
+			width:2px;
+			background-color:#fff;
+			height:18px;
+			margin-top:-9px;
+			margin-left:-11px;
+			top:50%;
+			left:50%;
+		}
+		.btn.next{
+			margin-left:75px;
+		}
+		.btn.next:after{
+			position:absolute;
+			content:"";
+			border-left:18px #fff solid;
+			border-top:9px rgba(0,0,0,0) solid;
+			border-bottom:9px rgba(0,0,0,0) solid;
+			margin-top:-9px;
+			margin-left:-9px;
+			top:50%;
+			left:50%;
+		}
+		.btn.next:before{
+			position:absolute;
+			content:"";
+			width:2px;
+			background-color:#fff;
+			height:18px;
+			margin-top:-9px;
+			margin-left:8px;
+			top:50%;
+			left:50%;
+		}
+		.gray-bg{
+			background-color:#ccc;
+			color:#333;
+		}
+		.btn.gray-bg:active{
+			background-color:#aaa;
+		}
+		.btn.volu{
+			margin-top:-90px;
+			border-radius:25px 25px 0 0;
+			z-index:100;
+		}
+		.btn.vold{
+			margin-top:40px;
+			border-radius:0 0 25px 25px;
+			z-index:100;
+		}
+	</style>
+</head>
+<body>
+	<div class="rm-frame">
+		<div class="red-bg btn play" id="btn-play"></div>
+		<div class="red-bg btn prev" id="btn-prev"></div>
+		<div class="red-bg btn next" id="btn-next"></div>
+		<div class="gray-bg btn volu" id="btn-volu">+</div>
+		<div class="gray-bg btn vold" id="btn-vold">-</div>
+	</div>
+	<script>
+	window.onload = function(){
+		var btnPlay = document.getElementById('btn-play');
+		var btnPrev = document.getElementById('btn-prev');
+		var btnNext = document.getElementById('btn-next');
+		var btnVolu = document.getElementById('btn-volu');
+		var btnVold = document.getElementById('btn-vold');
+
+		btnPlay.addEventListener('click', play);
+
+		btnPrev.addEventListener('click', prev);
+
+		btnNext.addEventListener('click', next);
+
+		btnVolu.addEventListener('click', volu);
+
+		btnVold.addEventListener('click', vold);
+
+		function play(){
+			send('play');
+		}
+		function prev(){
+			send('prev');
+		}
+		function next(){
+			send('next');
+		}
+		function volu(){
+			send('volu');
+		}
+		function vold(){
+			send('vold');
+		}
+
+		function send(cmd){
+			ajax('./cmd/' + cmd, function(c, d){
+
+			}, function(c, m){
+				alert(m);
+			});
+		}
+
+		function ajax(a, b, c, d){
+	        var url, arg, func_ok, func_er;
+	        if(arguments.length == 4){
+	            url = a;
+	            arg = b;
+	            func_ok = c;
+	            func_er = d;
+	        }else if(arguments.length == 3){
+	            url = a;
+	            if(typeof b == "function"){
+	                func_ok = b;
+	                func_er = c;
+	            }else{
+	                arg = b;
+	                func_ok = c;
+	            }
+	        }else if(arguments.length == 2){
+	            url = a;
+	            if(typeof b == "function"){
+	                func_ok = b;
+	            }else{
+	                arg = b;
+	            }
+	        }else{
+	            url = a;
+	        }
+	        arg = arg || {};
+
+	        var xhr = new XMLHttpRequest();
+	        xhr.handleerror = function(d){
+	            console.log(d)
+	            if(!d){
+	                console.error("Connetction error.");
+	                alert("Connetction error.");
+	            }else if(typeof d == "string"){
+	                console.error("XHRParseError");
+	                alert("XHRParseError");
+	                console.log([a, b, c, d]);
+	                console.log(d);
+	            }else if(d.code !== undefined){
+	                func_er && func_er(d.code, d.message);
+	            }else{
+	                console.error("XHRIllegal");
+	                alert("XHRIllegal");
+	                console.log([a, b, c, d]);
+	                console.log(d);
+	            }
+	        }
+	        xhr.onreadystatechange = function(){
+	            var d;
+	            if(this.readyState == 4){
+	                if(this.status == 200){
+	                    d = this.responseText;
+	                    try{
+	                        d = JSON.parse(d);
+	                    }catch(e){
+	                        console.error("JSONParseError or CallbackError");
+	                        alert("JSONParseError or CallbackError");
+	                        console.error(e);
+	                        this.handleerror(d);
+	                        return;
+	                    }
+	                    if(d.code && d.code > 0){
+	                        func_ok && func_ok(d.code, d.args)
+	                    }else{
+	                        this.handleerror(d);
+	                    }
+	                }else{
+	                    console.log(this.status);
+	                    this.handleerror();
+	                }
+	            }
+	        }
+	        xhr.open("POST", url, true);
+	        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	        xhr.send(serialize(arg));
+	    };
+
+	    function serialize(o){
+	        var a = [], i;
+	        for(i in o){
+	            a.push(i + '=' + encodeURIComponent(o[i]));
+	        }
+	        return a.join('&');
+	    };
+	};
+	</script>
+</body>
+</html>
