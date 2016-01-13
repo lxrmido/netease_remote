@@ -1,6 +1,6 @@
 {
   "name": "netease_remote",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Netease Music remote controller with web",
   "main": "app.js",
   "scripts": {

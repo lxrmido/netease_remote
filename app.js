@@ -35,54 +35,28 @@ $.framework('Cocoa');
 app.get('/', function(req, res){
 	res.sendFile(path.join(__dirname, 'remote.html'));
 });
-app.post('/cmd/play', function(req, res){
-	pressWithCmdAlt(SC_KEY.PLAY);
-	console.log("Command:'Play' received.");
-	res.json({
-		code : 1
-	});
-});
-app.post('/cmd/next', function(req, res){
-	pressWithCmdAlt(SC_KEY.NEXT);
-	console.log("Command:'Next' received.");
-	res.json({
-		code : 1
-	});
-});
-app.post('/cmd/prev', function(req, res){
-	pressWithCmdAlt(SC_KEY.PREV);
-	console.log("Command:'Prev' received.");
-	res.json({
-		code : 1
-	});
-});
-app.post('/cmd/volu', function(req, res){
-	pressWithCmdAlt(SC_KEY.VOLU);
-	console.log("Command:'Vol Up' received.");
-	res.json({
-		code : 1
-	});
-});
-app.post('/cmd/vold', function(req, res){
-	pressWithCmdAlt(SC_KEY.VOLD);
-	console.log("Command:'Vol Down' received.");
-	res.json({
-		code : 1
-	});
-});
-app.post('/cmd/like', function(req, res){
-	pressWithCmdAlt(SC_KEY.LIKE);
-	console.log("Command:'Like' received.");
-	res.json({
-		code : 1
-	});
-});
-app.post('/cmd/lrc', function(req, res){
-	pressWithCmdAlt(SC_KEY.LRC);
-	console.log("Command:'Lyric' received.");
-	res.json({
-		code : 1
-	});
+app.post('/cmd/:action', function(req, res){
+	var action_key_map = {
+		play : SC_KEY.PLAY,
+		prev : SC_KEY.PREV,
+		next : SC_KEY.NEXT,
+		volu : SC_KEY.VOLU,
+		vold : SC_KEY.VOLD,
+		like : SC_KEY.LIKE,
+		lrc  : SC_KEY.LRC,
+	};
+	if(action_key_map[req.params.action]){
+		console.log('Key `' + req.params.action + '` pressed.');
+		pressWithCmdAlt(action_key_map[req.params.action]);
+		res.json({
+			code : 1
+		});
+	}else{
+		res.json({
+			code : -404,
+			message : 'Action Not Found.'
+		});
+	}
 });
 
 console.log('Start up.');
