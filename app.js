@@ -62,14 +62,12 @@ app.post('/cmd/:action', function(req, res){
 console.log('Start up.');
 
 function pressWithCmdAlt(key){
-	
 	var dd = $.CGEventCreateKeyboardEvent(null, key, true);
-    var du = $.CGEventCreateKeyboardEvent(null, key, false);
+	var du = $.CGEventCreateKeyboardEvent(null, key, false);
 
-    $.CGEventSetFlags(dd, $.kCGEventFlagMaskCommand ^ $.kCGEventFlagMaskAlternate); 
+	$.CGEventSetFlags(dd, $.kCGEventFlagMaskCommand ^ $.kCGEventFlagMaskAlternate); 
 	$.CGEventSetFlags(du, $.kCGEventFlagMaskCommand ^ $.kCGEventFlagMaskAlternate);
 	$.CGEventPost($.kCGHIDEventTap, dd);
 	$.CGEventPost($.kCGHIDEventTap, du);
-
 }
 
